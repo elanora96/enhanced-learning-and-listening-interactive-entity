@@ -1,43 +1,192 @@
 {
-	"name": "discordbot-template",
-	"version": "3.3.2",
-	"description": "A modified template based on discordjs.guide to create your own discord-js based bot!",
-	"funding": "https://ko-fi.com/namanvrati",
-	"types": "./typings.d.ts",
-	"main": "bot.js",
-	"scripts": {
-		"start": "node bot.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/NamVr/DiscordBot-Template.git"
-	},
-	"keywords": [
-		"discord-js"
-	],
-	"author": {
-		"name": "Naman Vrati",
-		"url": "https://github.com/NamVr",
-		"email": "info@namanvrati.cf"
-	},
-	"contributors": [
-		{
-			"name": "Krish Garg",
-			"url": "https://github.com/KrishGarg"
-		},
-		{
-			"name": "Thomas Fournier",
-			"email": "thomas@artivain.com",
-			"url": "https://github.com/GoudronViande24"
-		}
-	],
-	"license": "Apache-2.0",
-	"bugs": {
-		"url": "https://github.com/NamVr/DiscordBot-Template/issues"
-	},
-	"homepage": "https://github.com/NamVr/DiscordBot-Template#readme",
-	"dependencies": {
-		"discord-api-types": "^0.37.43",
-		"discord.js": "^14.11.0"
-	}
+  "name": "enhanced-learning-and-listening-interactive-entity",
+  "version": "0.0.1A",
+  "type": "module",
+  "description": "A bot based on the NamVr/DiscordBot-Template for discord.js",
+  "types": "./typings.d.ts",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elanora96/enhanced-learning-and-listening-interactive-entity.git"
+  },
+  "keywords": [
+    "discord-js"
+  ],
+  "author": {
+    "name": "Elanora Manson",
+    "url": "https://github.com/elanora96",
+    "email": "git@elanora.lol"
+  },
+  "contributors": [
+    {
+      "name": "Naman Vrati",
+      "url": "https://github.com/NamVr",
+      "email": "info@namanvrati.cf"
+    },
+    {
+      "name": "Krish Garg",
+      "url": "https://github.com/KrishGarg"
+    },
+    {
+      "name": "Thomas Fournier",
+      "email": "thomas@artivain.com",
+      "url": "https://github.com/GoudronViande24"
+    }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/elanora96/enhanced-learning-and-listening-interactive-entity/issues"
+  },
+  "homepage": "https://github.com/elanora96/enhanced-learning-and-listening-interactive-entity#readme",
+  "dependencies": {
+    "discord-api-types": "^0.37.43",
+    "discord.js": "^14.11.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^20.14.8",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.2",
+    "typescript-eslint": "^7.13.1"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "!(*.js|*.ts)": [
+      "prettier --write --ignore-unknown"
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": false
+    },
+    "extends": [
+      "plugin:prettier/recommended"
+    ],
+    "plugins": [
+      "import",
+      "prettier"
+    ],
+    "parser": "typescript-eslint/parser",
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2024
+    },
+    "rules": {
+      "prettier/prettier": "warn",
+      "no-unused-vars": "off",
+      "typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "args": "after-used",
+          "ignoreRestSiblings": false,
+          "argsIgnorePattern": "^_.*?$"
+        }
+      ],
+      "import/order": [
+        "warn",
+        {
+          "groups": [
+            "type",
+            "builtin",
+            "object",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "pathGroups": [
+            {
+              "pattern": "~/**",
+              "group": "external",
+              "position": "after"
+            }
+          ],
+          "newlines-between": "always"
+        }
+      ],
+      "padding-line-between-statements": [
+        "warn",
+        {
+          "blankLine": "always",
+          "prev": "*",
+          "next": "return"
+        },
+        {
+          "blankLine": "always",
+          "prev": [
+            "const",
+            "let",
+            "var"
+          ],
+          "next": "*"
+        },
+        {
+          "blankLine": "any",
+          "prev": [
+            "const",
+            "let",
+            "var"
+          ],
+          "next": [
+            "const",
+            "let",
+            "var"
+          ]
+        }
+      ]
+    }
+  },
+  "template": {
+    "funding": "https://ko-fi.com/namanvrati",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/NamVr/DiscordBot-Template.git"
+    },
+    "keywords": [
+      "discord-js"
+    ],
+    "author": {
+      "name": "Naman Vrati",
+      "url": "https://github.com/NamVr",
+      "email": "info@namanvrati.cf"
+    },
+    "contributors": [
+      {
+        "name": "Krish Garg",
+        "url": "https://github.com/KrishGarg"
+      },
+      {
+        "name": "Thomas Fournier",
+        "email": "thomas@artivain.com",
+        "url": "https://github.com/GoudronViande24"
+      }
+    ],
+    "license": "Apache-2.0",
+    "bugs": {
+      "url": "https://github.com/NamVr/DiscordBot-Template/issues"
+    },
+    "homepage": "https://github.com/NamVr/DiscordBot-Template#readme",
+    "dependencies": {
+      "discord-api-types": "^0.37.43",
+      "discord.js": "^14.11.0"
+    }
+  }
 }

@@ -1,45 +1,39 @@
 /**
  * @file Slash Command Interaction Handler
- * @author Naman Vrati
+ * @commonjsauthor Naman Vrati
  * @since 3.0.0
  * @version 3.3.2
  */
 
-const { Events } = require("discord.js");
+import { Events } from 'discord.js';
+import console from 'console';
 
-module.exports = {
-	name: Events.InteractionCreate,
+export const name = Events.InteractionCreate;
+/**
+ * @description Executes when an interaction is created and handle it.
+ * @commonjsauthor Naman Vrati
+ * @param {import('discord.js').CommandInteraction & { client: import('../typings').Client }} interaction The interaction which was created
+ */
+export async function execute(interaction) {
+  // Deconstructed client from interaction object.
+  const { client } = interaction;
 
-	/**
-	 * @description Executes when an interaction is created and handle it.
-	 * @author Naman Vrati
-	 * @param {import('discord.js').CommandInteraction & { client: import('../typings').Client }} interaction The interaction which was created
-	 */
+  // Checks if the interaction is a command (to prevent weird bugs)
+  if (!interaction.isChatInputCommand()) return;
 
-	async execute(interaction) {
-		// Deconstructed client from interaction object.
-		const { client } = interaction;
+  const command = client.slashCommands.get(interaction.commandName);
 
-		// Checks if the interaction is a command (to prevent weird bugs)
+  // If the interaction is not a command in cache.
+  if (!command) return;
 
-		if (!interaction.isChatInputCommand()) return;
-
-		const command = client.slashCommands.get(interaction.commandName);
-
-		// If the interaction is not a command in cache.
-
-		if (!command) return;
-
-		// A try to executes the interaction.
-
-		try {
-			await command.execute(interaction);
-		} catch (err) {
-			console.error(err);
-			await interaction.reply({
-				content: "There was an issue while executing that command!",
-				ephemeral: true,
-			});
-		}
-	},
-};
+  // A try to executes the interaction.
+  try {
+    await command.execute(interaction);
+  } catch (err) {
+    console.error(err);
+    await interaction.reply({
+      content: 'There was an issue while executing that command!',
+      ephemeral: true,
+    });
+  }
+}

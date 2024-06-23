@@ -1,81 +1,71 @@
 /**
  * @file Sample help command with slash command.
- * @author Naman Vrati & Thomas Fournier
+ * @commonjsauthor Naman Vrati & Thomas Fournier
  * @since 3.0.0
  * @version 3.3.0
  */
 
 // Deconstructed the constants we need in this file.
 
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 
 /**
  * @type {import('../../../typings').SlashInteractionCommand}
  */
-module.exports = {
-	// The data needed to register slash commands to Discord.
+export const data = new SlashCommandBuilder()
+  .setName('help')
+  .setDescription('List all commands of bot or info about a specific command.')
+  .addStringOption((option) =>
+    option
+      .setName('command')
+      .setDescription('The specific command to see the info of.'),
+  );
+export async function execute(interaction) {
+  /**
+   * @type {string}
+   * @description The "command" argument
+   */
+  let name = interaction.options.getString('command');
 
-	data: new SlashCommandBuilder()
-		.setName("help")
-		.setDescription(
-			"List all commands of bot or info about a specific command."
-		)
-		.addStringOption((option) =>
-			option
-				.setName("command")
-				.setDescription("The specific command to see the info of.")
-		),
+  /**
+   * @type {EmbedBuilder}
+   * @description Help command's embed
+   */
+  const helpEmbed = new EmbedBuilder().setColor('Random');
 
-	async execute(interaction) {
-		/**
-		 * @type {string}
-		 * @description The "command" argument
-		 */
-		let name = interaction.options.getString("command");
+  if (name) {
+    name = name.toLowerCase();
 
-		/**
-		 * @type {EmbedBuilder}
-		 * @description Help command's embed
-		 */
-		const helpEmbed = new EmbedBuilder().setColor("Random");
+    // If a single command has been asked for, send only this command's help.
+    helpEmbed.setTitle(`Help for \`${name}\` command`);
 
-		if (name) {
-			name = name.toLowerCase();
+    if (interaction.client.slashCommands.has(name)) {
+      const command = interaction.client.slashCommands.get(name);
 
-			// If a single command has been asked for, send only this command's help.
+      if (command.data.description)
+        helpEmbed.setDescription(
+          command.data.description + '\n\n**Parameters:**',
+        );
+    } else {
+      helpEmbed
+        .setDescription(`No slash command with the name \`${name}\` found.`)
+        .setColor('Red');
+    }
+  } else {
+    // Give a list of all the commands
+    helpEmbed
+      .setTitle('List of all my slash commands')
+      .setDescription(
+        '`' +
+          interaction.client.slashCommands
+            .map((command) => command.data.name)
+            .join('`, `') +
+          '`',
+      );
+  }
 
-			helpEmbed.setTitle(`Help for \`${name}\` command`);
-
-			if (interaction.client.slashCommands.has(name)) {
-				const command = interaction.client.slashCommands.get(name);
-
-				if (command.data.description)
-					helpEmbed.setDescription(
-						command.data.description + "\n\n**Parameters:**"
-					);
-			} else {
-				helpEmbed
-					.setDescription(`No slash command with the name \`${name}\` found.`)
-					.setColor("Red");
-			}
-		} else {
-			// Give a list of all the commands
-
-			helpEmbed
-				.setTitle("List of all my slash commands")
-				.setDescription(
-					"`" +
-						interaction.client.slashCommands
-							.map((command) => command.data.name)
-							.join("`, `") +
-						"`"
-				);
-		}
-
-		// Replies to the interaction!
-
-		await interaction.reply({
-			embeds: [helpEmbed],
-		});
-	},
-};
+  // Replies to the interaction!
+  await interaction.reply({
+    embeds: [helpEmbed],
+  });
+}

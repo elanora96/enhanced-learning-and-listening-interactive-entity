@@ -1,68 +1,58 @@
 /**
  * @file Main trigger handler file.
- * @author Naman Vrati
+ * @commonjsauthor Naman Vrati
  * @since 2.0.0
  * @version 3.3.2
  */
 
-const { Events } = require("discord.js");
+import { Events } from 'discord.js';
+import console from 'console';
 
-module.exports = {
-	name: Events.MessageCreate,
+export const name = Events.MessageCreate;
+/**
+ * @description Executes when a message is created and handle it.
+ * @commonjsauthor Naman Vrati
+ * @param {import('discord.js').Message & { client: import('../typings').Client }} message The message which was created.
+ */
+export async function execute(message) {
+  /**
+   * @description The Message Content of the received message seperated by spaces (' ') in an array, this excludes prefix and command/alias itself.
+   */
+  const args = message.content.split(/ +/);
 
-	/**
-	 * @description Executes when a message is created and handle it.
-	 * @author Naman Vrati
-	 * @param {import('discord.js').Message & { client: import('../typings').Client }} message The message which was created.
-	 */
+  // Checks if the trigger author is a bot. Comment this line if you want to reply to bots as well.
+  if (message.author.bot) return;
 
-	async execute(message) {
-		/**
-		 * @description The Message Content of the received message seperated by spaces (' ') in an array, this excludes prefix and command/alias itself.
-		 */
+  // Checking ALL triggers using every function and breaking out if a trigger was found.
+  /**
+   * Checks if the message has a trigger.
+   * @type {Boolean}
+   * */
+  let triggered = false;
 
-		const args = message.content.split(/ +/);
+  message.client.triggers.every((trigger) => {
+    if (triggered) return false;
 
-		// Checks if the trigger author is a bot. Comment this line if you want to reply to bots as well.
+    trigger.name.every(async (name) => {
+      if (triggered) return false;
 
-		if (message.author.bot) return;
+      // If validated, it will try to execute the trigger.
+      if (message.content.includes(name)) {
+        try {
+          trigger.execute(message, args);
+        } catch (error) {
+          // If triggereds fail, reply back!
+          console.error(error);
 
-		// Checking ALL triggers using every function and breaking out if a trigger was found.
+          message.reply({
+            content: 'there was an error trying to execute that trigger!',
+          });
+        }
 
-		/**
-		 * Checks if the message has a trigger.
-		 * @type {Boolean}
-		 * */
-
-		let triggered = false;
-
-		message.client.triggers.every((trigger) => {
-			if (triggered) return false;
-
-			trigger.name.every(async (name) => {
-				if (triggered) return false;
-
-				// If validated, it will try to execute the trigger.
-
-				if (message.content.includes(name)) {
-					try {
-						trigger.execute(message, args);
-					} catch (error) {
-						// If triggereds fail, reply back!
-
-						console.error(error);
-
-						message.reply({
-							content: "there was an error trying to execute that trigger!",
-						});
-					}
-
-					// Set the trigger to be true & return.
-
-					triggered = true;
-					return false;
-				}
-			});
-		});
-	},
-};
+        // Set the trigger to be true & return.
+        triggered = true;
+        return false;
+      }
+    });
+  });
+}

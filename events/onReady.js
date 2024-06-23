@@ -1,21 +1,15 @@
 /**
  * @file Ready Event File.
- * @author Naman Vrati
+ * @commonjsauthor Naman Vrati
  * @since 1.0.0
  * @version 3.2.2
  */
 
-const { Events } = require("discord.js");
+import { Events } from 'discord.js';
+import console from 'console';
 
-module.exports = {
-	name: Events.ClientReady,
-	once: true,
-
-	/**
-	 * @description Executes when client is ready (bot initialization).
-	 * @param {import('../typings').Client} client Main Application Client.
-	 */
-	execute(client) {
-		console.log(`Ready! Logged in as ${client.user.tag}`);
-	},
-};
+export const name = Events.ClientReady;
+export const once = true;
+export function execute(client) {
+  console.log(`Ready! Logged in as ${client.user.tag}`);
+}
